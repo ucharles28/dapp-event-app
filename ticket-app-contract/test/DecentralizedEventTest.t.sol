@@ -10,10 +10,12 @@ contract DecentralizedEventTest is Test {
     address organizer = makeAddr('organizer');
     address attacker = makeAddr('attacker');
     address ticketHolder = makeAddr('ticketHolder');
+    address owner = makeAddr('owner');
     uint256 eventId = 1;
     uint256 ticketId = 1;
 
     function setUp() public {
+        vm.prank(owner);
         eventContract = new DecentralizedEvent();
         vm.deal(ticketHolder, 2 ether);
     }
@@ -66,6 +68,7 @@ contract DecentralizedEventTest is Test {
             "Cool event description",
             "Berlin",
             "ipfs://event-art",
+            "ipfs://thumbnail",
             0,
             100,
             block.timestamp + 1 days
@@ -83,6 +86,7 @@ contract DecentralizedEventTest is Test {
             "Cool event description",
             "Berlin",
             "ipfs://event-art",
+            "ipfs://thumbnail",
             1 ether,
             100,
             block.timestamp + 1 days
@@ -100,6 +104,7 @@ contract DecentralizedEventTest is Test {
             "",
             "Berlin",
             "ipfs://event-art",
+            "ipfs://thumbnail",
             1 ether,
             100,
             block.timestamp + 1 days
@@ -117,6 +122,7 @@ contract DecentralizedEventTest is Test {
             "Cool event description",
             "",
             "ipfs://event-art",
+            "ipfs://thumbnail",
             1 ether,
             100,
             block.timestamp + 1 days
@@ -134,6 +140,25 @@ contract DecentralizedEventTest is Test {
             "Cool event description",
             "Berlin",
             "",
+            "ipfs://thumbnail",
+            1 ether,
+            100,
+            block.timestamp + 1 days
+        );
+    }
+
+    function testRevertWhenThumbnailIsEmpty() public {
+        vm.expectRevert(
+            DecentralizedEvent
+                .DecentralizedEvent__EventThumbnailCannotBeEmpty
+                .selector
+        );
+        eventContract.createEvent(
+            "My Event",
+            "Cool event description",
+            "Berlin",
+            "ipfs://event-art",
+            "",
             1 ether,
             100,
             block.timestamp + 1 days
@@ -146,6 +171,7 @@ contract DecentralizedEventTest is Test {
             "Cool event description",
             "Berlin",
             "ipfs://event-art",
+            "ipfs://thumbnail",
             1 ether,
             100,
             block.timestamp + 1 days
@@ -169,6 +195,7 @@ contract DecentralizedEventTest is Test {
             "Initial description",
             "NYC",
             "ipfs://image",
+            "ipfs://thumbnail",
             1 ether,
             100,
             block.timestamp + 1 days
@@ -233,6 +260,7 @@ contract DecentralizedEventTest is Test {
                 description: "Updated description",
                 location: "Paris",
                 eventArt: "ipfs://new-art",
+                thumbnail: "ipfs://new-thumbnail",
                 ticketPrice: 2 ether,
                 totalTickets: 200,
                 eventDate: block.timestamp + 2 days,
@@ -247,7 +275,7 @@ contract DecentralizedEventTest is Test {
     //////////////////////////////////////
     modifier buyTicket {
         vm.prank(ticketHolder);
-        eventContract.buyTicket{value: 1 ether}(1, "");
+        eventContract.buyTicket{value: 1 ether}(1, "j");
         _;
     }
 

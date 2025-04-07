@@ -27,6 +27,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import {console} from "forge-std/console.sol";
 
 /**
  * @title DecentralizedEvent
@@ -54,6 +55,7 @@ contract DecentralizedEvent is ERC721URIStorage, Ownable, ReentrancyGuard {
     error DecentralizedEvent__TicketAlreadyUsed();
     error DecentralizedEvent__TicketUnavailableForSale();
     error DecentralizedEvent__TransferFailed();
+    error DecentralizedEvent__EventThumbnailCannotBeEmpty();
 
     ////////////////////////////////////
     /////// Type Declarations    ///////
@@ -163,7 +165,7 @@ contract DecentralizedEvent is ERC721URIStorage, Ownable, ReentrancyGuard {
             revert DecentralizedEvent__EventNameCannotBeEmpty();
         }
         if (bytes(_thumbnail).length == 0) {
-            revert DecentralizedEvent__EventNameCannotBeEmpty();
+            revert DecentralizedEvent__EventThumbnailCannotBeEmpty();
         }
         if (bytes(_eventArt).length == 0) {
             revert DecentralizedEvent__EventArtCannotBeEmpty();
@@ -303,6 +305,7 @@ contract DecentralizedEvent is ERC721URIStorage, Ownable, ReentrancyGuard {
         s_events[_eventId].isCancelled = true;
     }
 
+
     function buyTicket(
         uint256 _eventId,
         string calldata _tokenUri
@@ -339,8 +342,14 @@ contract DecentralizedEvent is ERC721URIStorage, Ownable, ReentrancyGuard {
         uint256 loyaltyFee = (msg.value * 5) / 100;
         uint256 organizerFee = msg.value - loyaltyFee;
 
+        console.log(
+            "Organizer fee: %s, Loyalty fee: %s",
+            organizerFee,
+            loyaltyFee
+        );
         bool success = false;
         (success, ) = organizer.call{value: organizerFee}("");
+        console.log("Success: %s", success);
         if (!success) {
             revert DecentralizedEvent__TransferFailed();
         }

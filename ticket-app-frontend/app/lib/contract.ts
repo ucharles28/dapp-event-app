@@ -1,8 +1,26 @@
-export const contractAddress = '0x797Fb6Eb4ebe5B0a2CDae6A452475310aF893e5c';//'0x5FbDB2315678afecb367f032d93F642f64180aa3'
+export const contractAddress = '0xbD15B2b850561dDD6c7e6df46d0bf43297Af274c';
 export const abi = [
     {
         "type": "constructor",
         "inputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "_mintTicket",
+        "inputs": [
+            {
+                "name": "_to",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "_tokenUri",
+                "type": "string",
+                "internalType": "string"
+            }
+        ],
+        "outputs": [],
         "stateMutability": "nonpayable"
     },
     {
@@ -44,17 +62,22 @@ export const abi = [
     },
     {
         "type": "function",
-        "name": "createMarketItem",
+        "name": "buyTicket",
         "inputs": [
             {
-                "name": "tokenId",
+                "name": "_ticketId",
                 "type": "uint256",
                 "internalType": "uint256"
             },
             {
-                "name": "price",
+                "name": "_eventId",
                 "type": "uint256",
                 "internalType": "uint256"
+            },
+            {
+                "name": "_tokenUri",
+                "type": "string",
+                "internalType": "string"
             }
         ],
         "outputs": [],
@@ -62,12 +85,17 @@ export const abi = [
     },
     {
         "type": "function",
-        "name": "createMarketSale",
+        "name": "buyTicket",
         "inputs": [
             {
-                "name": "tokenId",
+                "name": "_eventId",
                 "type": "uint256",
                 "internalType": "uint256"
+            },
+            {
+                "name": "_tokenUri",
+                "type": "string",
+                "internalType": "string"
             }
         ],
         "outputs": [],
@@ -75,15 +103,58 @@ export const abi = [
     },
     {
         "type": "function",
-        "name": "createToken",
+        "name": "cancelEvent",
         "inputs": [
             {
-                "name": "tokenURI",
+                "name": "_eventId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "createEvent",
+        "inputs": [
+            {
+                "name": "_name",
                 "type": "string",
                 "internalType": "string"
             },
             {
-                "name": "price",
+                "name": "_description",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "_location",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "_eventArt",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "_thumbnail",
+                "type": "string",
+                "internalType": "string"
+            },
+            {
+                "name": "_ticketPrice",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_totalTickets",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_eventDate",
                 "type": "uint256",
                 "internalType": "uint256"
             }
@@ -99,123 +170,68 @@ export const abi = [
     },
     {
         "type": "function",
-        "name": "fetchItemsListed",
-        "inputs": [],
-        "outputs": [
+        "name": "editEvent",
+        "inputs": [
             {
-                "name": "",
-                "type": "tuple[]",
-                "internalType": "struct NFTMarketplace.MarketItem[]",
+                "name": "_eventId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "update",
+                "type": "tuple",
+                "internalType": "struct DecentralizedEvent.EventUpdate",
                 "components": [
                     {
-                        "name": "tokenId",
+                        "name": "name",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "description",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "location",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "eventArt",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "thumbnail",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "ticketPrice",
                         "type": "uint256",
                         "internalType": "uint256"
                     },
                     {
-                        "name": "seller",
-                        "type": "address",
-                        "internalType": "address payable"
-                    },
-                    {
-                        "name": "owner",
-                        "type": "address",
-                        "internalType": "address payable"
-                    },
-                    {
-                        "name": "price",
+                        "name": "totalTickets",
                         "type": "uint256",
                         "internalType": "uint256"
                     },
                     {
-                        "name": "sold",
+                        "name": "eventDate",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "isCancelled",
                         "type": "bool",
                         "internalType": "bool"
                     }
                 ]
             }
         ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "fetchMarketItems",
-        "inputs": [],
-        "outputs": [
-            {
-                "name": "",
-                "type": "tuple[]",
-                "internalType": "struct NFTMarketplace.MarketItem[]",
-                "components": [
-                    {
-                        "name": "tokenId",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "seller",
-                        "type": "address",
-                        "internalType": "address payable"
-                    },
-                    {
-                        "name": "owner",
-                        "type": "address",
-                        "internalType": "address payable"
-                    },
-                    {
-                        "name": "price",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "sold",
-                        "type": "bool",
-                        "internalType": "bool"
-                    }
-                ]
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "fetchMyNFTs",
-        "inputs": [],
-        "outputs": [
-            {
-                "name": "",
-                "type": "tuple[]",
-                "internalType": "struct NFTMarketplace.MarketItem[]",
-                "components": [
-                    {
-                        "name": "tokenId",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "seller",
-                        "type": "address",
-                        "internalType": "address payable"
-                    },
-                    {
-                        "name": "owner",
-                        "type": "address",
-                        "internalType": "address payable"
-                    },
-                    {
-                        "name": "price",
-                        "type": "uint256",
-                        "internalType": "uint256"
-                    },
-                    {
-                        "name": "sold",
-                        "type": "bool",
-                        "internalType": "bool"
-                    }
-                ]
-            }
-        ],
-        "stateMutability": "view"
+        "outputs": [],
+        "stateMutability": "payable"
     },
     {
         "type": "function",
@@ -238,23 +254,10 @@ export const abi = [
     },
     {
         "type": "function",
-        "name": "getListingPrice",
-        "inputs": [],
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "stateMutability": "view"
-    },
-    {
-        "type": "function",
-        "name": "getMarketItem",
+        "name": "getEvent",
         "inputs": [
             {
-                "name": "_tokenId",
+                "name": "_eventId",
                 "type": "uint256",
                 "internalType": "uint256"
             }
@@ -263,30 +266,65 @@ export const abi = [
             {
                 "name": "",
                 "type": "tuple",
-                "internalType": "struct NFTMarketplace.MarketItem",
+                "internalType": "struct DecentralizedEvent.Event",
                 "components": [
                     {
-                        "name": "tokenId",
+                        "name": "id",
                         "type": "uint256",
                         "internalType": "uint256"
                     },
                     {
-                        "name": "seller",
-                        "type": "address",
-                        "internalType": "address payable"
+                        "name": "name",
+                        "type": "string",
+                        "internalType": "string"
                     },
                     {
-                        "name": "owner",
-                        "type": "address",
-                        "internalType": "address payable"
+                        "name": "description",
+                        "type": "string",
+                        "internalType": "string"
                     },
                     {
-                        "name": "price",
+                        "name": "location",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "eventArt",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "thumbnail",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "eventDate",
                         "type": "uint256",
                         "internalType": "uint256"
                     },
                     {
-                        "name": "sold",
+                        "name": "ticketPrice",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "totalTickets",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "ticketsSold",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "organizer",
+                        "type": "address",
+                        "internalType": "address payable"
+                    },
+                    {
+                        "name": "isCancelled",
                         "type": "bool",
                         "internalType": "bool"
                     }
@@ -297,26 +335,202 @@ export const abi = [
     },
     {
         "type": "function",
-        "name": "getOwner",
+        "name": "getEvents",
         "inputs": [],
         "outputs": [
             {
                 "name": "",
-                "type": "address",
-                "internalType": "address payable"
+                "type": "tuple[]",
+                "internalType": "struct DecentralizedEvent.Event[]",
+                "components": [
+                    {
+                        "name": "id",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "description",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "location",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "eventArt",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "thumbnail",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "eventDate",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "ticketPrice",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "totalTickets",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "ticketsSold",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "organizer",
+                        "type": "address",
+                        "internalType": "address payable"
+                    },
+                    {
+                        "name": "isCancelled",
+                        "type": "bool",
+                        "internalType": "bool"
+                    }
+                ]
             }
         ],
         "stateMutability": "view"
     },
     {
         "type": "function",
-        "name": "getTokenIds",
-        "inputs": [],
+        "name": "getEventsByOrganizer",
+        "inputs": [
+            {
+                "name": "organizer",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
         "outputs": [
             {
                 "name": "",
+                "type": "tuple[]",
+                "internalType": "struct DecentralizedEvent.Event[]",
+                "components": [
+                    {
+                        "name": "id",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "description",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "location",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "eventArt",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "thumbnail",
+                        "type": "string",
+                        "internalType": "string"
+                    },
+                    {
+                        "name": "eventDate",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "ticketPrice",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "totalTickets",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "ticketsSold",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "organizer",
+                        "type": "address",
+                        "internalType": "address payable"
+                    },
+                    {
+                        "name": "isCancelled",
+                        "type": "bool",
+                        "internalType": "bool"
+                    }
+                ]
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getTicket",
+        "inputs": [
+            {
+                "name": "_ticketId",
                 "type": "uint256",
                 "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "tuple",
+                "internalType": "struct DecentralizedEvent.Ticket",
+                "components": [
+                    {
+                        "name": "eventId",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    },
+                    {
+                        "name": "owner",
+                        "type": "address",
+                        "internalType": "address"
+                    },
+                    {
+                        "name": "isUsed",
+                        "type": "bool",
+                        "internalType": "bool"
+                    },
+                    {
+                        "name": "isForSale",
+                        "type": "bool",
+                        "internalType": "bool"
+                    },
+                    {
+                        "name": "price",
+                        "type": "uint256",
+                        "internalType": "uint256"
+                    }
+                ]
             }
         ],
         "stateMutability": "view"
@@ -344,6 +558,37 @@ export const abi = [
             }
         ],
         "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "listForResale",
+        "inputs": [
+            {
+                "name": "_ticketId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "_resalePrice",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "markTicketAsUsed",
+        "inputs": [
+            {
+                "name": "_ticketId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
     },
     {
         "type": "function",
@@ -399,21 +644,22 @@ export const abi = [
     },
     {
         "type": "function",
-        "name": "resellToken",
+        "name": "s_ticketToEventOrganizer",
         "inputs": [
             {
-                "name": "tokenId",
-                "type": "uint256",
-                "internalType": "uint256"
-            },
-            {
-                "name": "price",
+                "name": "",
                 "type": "uint256",
                 "internalType": "uint256"
             }
         ],
-        "outputs": [],
-        "stateMutability": "payable"
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
     },
     {
         "type": "function",
@@ -572,19 +818,6 @@ export const abi = [
         "stateMutability": "nonpayable"
     },
     {
-        "type": "function",
-        "name": "updateListingPrice",
-        "inputs": [
-            {
-                "name": "_listingPrice",
-                "type": "uint256",
-                "internalType": "uint256"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "payable"
-    },
-    {
         "type": "event",
         "name": "Approval",
         "inputs": [
@@ -655,105 +888,50 @@ export const abi = [
     },
     {
         "type": "event",
-        "name": "MarketItemCreated",
+        "name": "EventCreated",
         "inputs": [
             {
-                "name": "tokenId",
+                "name": "eventId",
                 "type": "uint256",
                 "indexed": true,
                 "internalType": "uint256"
             },
             {
-                "name": "seller",
+                "name": "organizer",
                 "type": "address",
                 "indexed": true,
                 "internalType": "address"
             },
             {
-                "name": "owner",
-                "type": "address",
-                "indexed": false,
-                "internalType": "address"
-            },
-            {
-                "name": "price",
-                "type": "uint256",
+                "name": "name",
+                "type": "string",
                 "indexed": true,
-                "internalType": "uint256"
-            },
-            {
-                "name": "sold",
-                "type": "bool",
-                "indexed": false,
-                "internalType": "bool"
+                "internalType": "string"
             }
         ],
         "anonymous": false
     },
     {
         "type": "event",
-        "name": "MarketItemSold",
+        "name": "EventModified",
         "inputs": [
             {
-                "name": "tokenId",
+                "name": "eventId",
                 "type": "uint256",
                 "indexed": true,
                 "internalType": "uint256"
             },
             {
-                "name": "newOwner",
+                "name": "organizer",
                 "type": "address",
                 "indexed": true,
                 "internalType": "address"
             },
             {
-                "name": "price",
-                "type": "uint256",
+                "name": "name",
+                "type": "string",
                 "indexed": true,
-                "internalType": "uint256"
-            },
-            {
-                "name": "sold",
-                "type": "bool",
-                "indexed": false,
-                "internalType": "bool"
-            }
-        ],
-        "anonymous": false
-    },
-    {
-        "type": "event",
-        "name": "MarketItemUpdated",
-        "inputs": [
-            {
-                "name": "tokenId",
-                "type": "uint256",
-                "indexed": true,
-                "internalType": "uint256"
-            },
-            {
-                "name": "seller",
-                "type": "address",
-                "indexed": true,
-                "internalType": "address"
-            },
-            {
-                "name": "owner",
-                "type": "address",
-                "indexed": false,
-                "internalType": "address"
-            },
-            {
-                "name": "price",
-                "type": "uint256",
-                "indexed": true,
-                "internalType": "uint256"
-            },
-            {
-                "name": "sold",
-                "type": "bool",
-                "indexed": false,
-                "internalType": "bool"
+                "internalType": "string"
             }
         ],
         "anonymous": false
@@ -792,6 +970,106 @@ export const abi = [
     },
     {
         "type": "event",
+        "name": "TicketListedForResale",
+        "inputs": [
+            {
+                "name": "ticketId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "owner",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "price",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            },
+            {
+                "name": "eventId",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "TicketMinted",
+        "inputs": [
+            {
+                "name": "ticketId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "owner",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "tokenUri",
+                "type": "string",
+                "indexed": true,
+                "internalType": "string"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "TicketTransferred",
+        "inputs": [
+            {
+                "name": "ticketId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "from",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "to",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "TicketUsed",
+        "inputs": [
+            {
+                "name": "ticketId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "owner",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
         "name": "Transfer",
         "inputs": [
             {
@@ -814,6 +1092,96 @@ export const abi = [
             }
         ],
         "anonymous": false
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__AmountLessThanTicketPrice",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventArtCannotBeEmpty",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventCancelled",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventDateIsInvalid",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventDescriptionCannotBeEmpty",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventDoesNotExist",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventHasEnded",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventIsSoldOut",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventLocationIsRequired",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventNameCannotBeEmpty",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__EventThumbnailCannotBeEmpty",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__SenderIsNotOrganizer",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__SenderIsNotTicketOwner",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__TicketAlreadyUsed",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__TicketPriceGreaterThanZero",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__TicketUnavailableForSale",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__TicketsShouldbeGreaterThanZero",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DecentralizedEvent__TransferFailed",
+        "inputs": []
     },
     {
         "type": "error",
@@ -920,36 +1288,6 @@ export const abi = [
     },
     {
         "type": "error",
-        "name": "NFTMarketplace__InvalidItemOwner",
-        "inputs": []
-    },
-    {
-        "type": "error",
-        "name": "NFTMarketplace__MoreThanZero",
-        "inputs": []
-    },
-    {
-        "type": "error",
-        "name": "NFTMarketplace__MustBeEqualToAskingPrice",
-        "inputs": []
-    },
-    {
-        "type": "error",
-        "name": "NFTMarketplace__MustBeEqualToListingPrice",
-        "inputs": []
-    },
-    {
-        "type": "error",
-        "name": "NFTMarketplace__TokeURIEmpty",
-        "inputs": []
-    },
-    {
-        "type": "error",
-        "name": "NFTMarketplace__TransferFailed",
-        "inputs": []
-    },
-    {
-        "type": "error",
         "name": "OwnableInvalidOwner",
         "inputs": [
             {
@@ -969,5 +1307,10 @@ export const abi = [
                 "internalType": "address"
             }
         ]
+    },
+    {
+        "type": "error",
+        "name": "ReentrancyGuardReentrantCall",
+        "inputs": []
     }
 ] as const

@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import {ConnectBtn} from './ConnectButton'
 import React, { useState, useEffect } from 'react'

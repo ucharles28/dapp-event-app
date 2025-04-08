@@ -336,4 +336,57 @@ contract DecentralizedEventTest is Test {
         vm.expectRevert(DecentralizedEvent.DecentralizedEvent__EventDoesNotExist.selector);
         eventContract.cancelEvent(invalidEventId);
     }
+
+
+     function testGetEventsReturnsActiveEventsOnly() public {
+        vm.startPrank(organizer);
+
+        // Event 1: Active (future date)
+        eventContract.createEvent(
+            "Active Event",
+            "Cool event",
+            "NYC",
+            "art",
+            "thumb",
+            1 ether,
+            100,
+            block.timestamp + 5 days
+        );
+
+        // Event 2: Cancelled
+        eventContract.createEvent(
+            "Cancelled Event",
+            "Nope",
+            "LA",
+            "art",
+            "thumb",
+            1 ether,
+            100,
+            block.timestamp + 1 days
+        );
+        eventContract.cancelEvent(2);
+
+        // Event 3: Ended
+        eventContract.createEvent(
+            "Past Event",
+            "Old stuff",
+            "Berlin",
+            "art",
+            "thumb",
+            1 ether,
+            100,
+            block.timestamp + 1 days
+        );
+
+        // Fast forward past Event 3
+        vm.warp(block.timestamp + 2 days);
+
+        vm.stopPrank();
+
+        // Check
+        DecentralizedEvent.Event[] memory events = eventContract.getEvents();
+        assertEq(events.length, 1);
+        assertEq(events[0].name, "Active Event");
+        assertEq(events[0].location, "NYC");
+    }
 }

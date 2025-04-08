@@ -6,11 +6,12 @@ import { Inter } from "next/font/google";
 import Providers from "./providers";
 import { headers } from "next/headers";
 import Layout from './components/Layout';
+import { AnimatePresence } from "framer-motion"
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Metaverse Marketplace",
+  title: "Ticket App",
   description: "Your one stop NFT Marketplace",
 };
 
@@ -27,9 +28,11 @@ export default async function RootLayout({
         className={`${inter.className} antialiased`}
       >
         <Providers cookie={cookie}>
-          <Layout>
-            {children}
-          </Layout>
+          <AnimatePresence>
+            <Layout>
+              {children}
+            </Layout>
+          </AnimatePresence>
         </Providers>
       </body>
     </html>

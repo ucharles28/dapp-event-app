@@ -104,6 +104,7 @@ contract DecentralizedEvent is ERC721URIStorage, Ownable, ReentrancyGuard {
     mapping(uint256 => Event) private s_events; //@notice mapping of events
     mapping(uint256 => Ticket) private s_tickets; //@notice mapping of tickets
     mapping(uint256 => address) public s_ticketToEventOrganizer; //@notice mapping of tickets to event organizers
+    mapping(address => uint256[]) private s_organizerToEventIds; //@notice mapping of event organizers to event ids
     uint256 private s_totalEvents;
     uint256 private s_totalTickets;
     address payable private immutable i_owner;
@@ -233,7 +234,8 @@ contract DecentralizedEvent is ERC721URIStorage, Ownable, ReentrancyGuard {
             eventArt: _eventArt,
             thumbnail: _thumbnail
         });
-        //ended: false
+
+        s_organizerToEventIds[msg.sender].push(s_totalEvents);
 
         // Interactions
         emit EventCreated(s_totalEvents, msg.sender, _name);
@@ -304,7 +306,6 @@ contract DecentralizedEvent is ERC721URIStorage, Ownable, ReentrancyGuard {
         }
         s_events[_eventId].isCancelled = true;
     }
-
 
     function buyTicket(
         uint256 _eventId,
@@ -461,6 +462,19 @@ contract DecentralizedEvent is ERC721URIStorage, Ownable, ReentrancyGuard {
             if (!_hasEventEnded(i) && !s_events[i].isCancelled) {
                 events[index] = s_events[i];
             }
+        }
+
+        return events;
+    }
+
+    function getEventsByOrganizer(
+        address organizer
+    ) external view returns (Event[] memory) {
+        uint256[] memory ids = s_organizerToEventIds[organizer];
+        Event[] memory events = new Event[](ids.length);
+
+        for (uint256 i = 0; i < ids.length; i++) {
+            events[i] = s_events[ids[i]];
         }
 
         return events;

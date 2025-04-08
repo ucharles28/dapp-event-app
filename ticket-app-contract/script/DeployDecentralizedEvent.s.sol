@@ -5,9 +5,10 @@ import {Script} from "forge-std/Script.sol";
 import {DecentralizedEvent} from "../src/DecentralizedEvent.sol";
 
 contract DeployDecentralizedEvent is Script {
-    function run() external {
+    function run() external returns (DecentralizedEvent) {
         vm.startBroadcast();
-        new DecentralizedEvent();
+        DecentralizedEvent decentralizedEvent = new DecentralizedEvent();
         vm.stopBroadcast();
+        return decentralizedEvent;
     }
 }

@@ -41,7 +41,6 @@ export const config = createConfig({
         storage: cookieStorage,
     }),
     transports: {
-        [sepolia.id]: http(),
-        // [mainnet.id]: http(),
+        [sepolia.id]: http(`https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_KEY}`),
     },
 })
